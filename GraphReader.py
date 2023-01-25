@@ -1,41 +1,52 @@
-import csv
-from re import X
 
 class GraphReader:
 
-    def __init__(self, path):
+    def __init__(self, path, isColor=False):
         self.__path = path
-        self.__adjacency_list = {}
+        self.__matrix = []
+        self.__isColor = isColor
 
     
     def read(self):
         isHeader = True
-
+        
         with open(self.__path, 'r') as data:
             for line in data:
                 line = line.strip()
                 nodes = line.split(";")
                 if isHeader:
-                    nodes = nodes[1::]
-                    self.__getNodes(nodes)
                     isHeader = False
+                    continue
                 else:
-                    self.__getValues(nodes)
+                    newLine = self.parseColor(nodes) if self.__isColor else self.parseFloat(nodes)
+                    self.__matrix.append(newLine)
+        return self.__matrix if self.__isColor else self.__fixDirection()
 
-        return self.__adjacency_list
-    
-    def __getNodes(self, nodes):
-        for node in nodes:
-            self.__adjacency_list[node] =[]
-
-    def __getValues(self, nodes):
+    def parseColor(self, nodes):
         key = nodes.pop(0)
-        for index, value in enumerate(nodes):
-            if value == "-": continue
-            newNode = f"E{index+1}"
-            distanceInMeters = float(value.replace(',', '.')) * 1000.0
-            velocity = 8.33333
-            time = distanceInMeters / velocity
-            self.__adjacency_list[key].append((newNode, time))
-            self.__adjacency_list[newNode].append((key, time))
+        return nodes
+
+    def __toFloat(self,number):
+        if number == "-": return 0.0
+        return float(number.replace(",", "."))
+
+    def __fixDirection(self):
+        for row in range(14):
+            for column in range(14):
+                if self.__matrix[row][column] != 0:
+                    self.__matrix[column][row] = self.__matrix[row][column]
+                else:
+                    self.__matrix[row][column] = self.__matrix[column][row]
+        return self.__matrix
+                     
+    def parseFloat(self, nodes):
+        key = nodes.pop(0)
+        return list(map(self.__toFloat, nodes))
+
+if __name__ == "__main__":
+    reader = GraphReader("./direct-distance.csv")
+    lista = reader.read()
+    reader = GraphReader("./color-lines.csv", True)
+    lista = reader.read()
+    print(lista)
 

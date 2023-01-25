@@ -1,11 +1,12 @@
+from AdjacencyList import AdjacencyList
 from GraphReader import GraphReader
-from DirectDistance import DirectDistance
+
 
 class Graph:
 
     def __init__(self, adjacency_list):
         self.__adjacency_list = adjacency_list
-        self.__heuristic_matrix = DirectDistance("./direct-distance.csv").read()
+        self.__heuristic_matrix = GraphReader("./direct-distance.csv").read()
         self.__color_line = None
 
     def neighborhood(self, node):
@@ -75,7 +76,7 @@ class Graph:
 
 
 if __name__ == "__main__":
-    reader = GraphReader("./real-distance.csv")
+    reader = AdjacencyList("./real-distance.csv")
     adj_list = reader.read()
     oi = Graph(adj_list)
     oi.a_star("E1", "E7")
