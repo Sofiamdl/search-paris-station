@@ -52,9 +52,13 @@ class Graph:
 
             reconst_path.append(first_station)
 
+            target = reconst_path[0]
+            targetInMinutes = g[target]/60
+
             reconst_path.reverse()
 
             print('Caminho encontrado: {}'.format(reconst_path))
+            print(f"Duração: {targetInMinutes:.2f} minutos")
             
             return reconst_path
 
