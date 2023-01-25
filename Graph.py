@@ -55,6 +55,7 @@ class Graph:
             reconst_path.reverse()
 
             print('Caminho encontrado: {}'.format(reconst_path))
+            
             return reconst_path
 
         for (station, distance) in self.neighborhood(current_station):
