@@ -1,4 +1,5 @@
 import csv
+from re import X
 
 class GraphReader:
 
@@ -31,11 +32,10 @@ class GraphReader:
         key = nodes.pop(0)
         for index, value in enumerate(nodes):
             if value == "-": continue
-            newNode = (f'E{index+1}', float(value.replace(',', '.')))
-            self.__adjacency_list[key].append(newNode)
-
-if __name__ == "__main__":
-    reader = GraphReader("./real-distance.csv")
-    adj_list = reader.read()
-    print(adj_list)
+            newNode = f"E{index+1}"
+            distanceInMeters = float(value.replace(',', '.')) * 1000.0
+            velocity = 8.33333
+            time = distanceInMeters / velocity
+            self.__adjacency_list[key].append((newNode, time))
+            self.__adjacency_list[newNode].append((key, time))
 
