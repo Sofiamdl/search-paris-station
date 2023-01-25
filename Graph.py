@@ -7,7 +7,7 @@ class Graph:
     def __init__(self, adjacency_list):
         self.__adjacency_list = adjacency_list
         self.__heuristic_matrix = GraphReader("./direct-distance.csv").read()
-        self.__color_line = None
+        self.__color_matrix = GraphReader("./color-lines.csv", True).read()
 
     def neighborhood(self, node):
         return self.__adjacency_list[node]
@@ -16,6 +16,11 @@ class Graph:
         start = int(start[1:]) - 1 
         end = int(end[1:]) - 1
         return self.__heuristic_matrix[start][end] 
+    
+    def find_color(self, start, end):
+        start = int(start[1:]) - 1 
+        end = int(end[1:]) - 1
+        return self.__color_matrix[start][end] 
 
     def a_star(self, first_station, last_station):
       visited_stations = set([first_station])
@@ -53,11 +58,15 @@ class Graph:
             return reconst_path
 
         for (station, distance) in self.neighborhood(current_station):
-
             if station not in visited_stations and station not in visited_neighbors:
                 visited_stations.add(station)
                 parents[station] = current_station
-                g[station] = g[current_station] + distance
+                color_line_anterior = self.find_color(parents[current_station], current_station)
+                color_line_aux = self.find_color(current_station, station)
+                if color_line_anterior != color_line_aux and color_line_aux != "-" and color_line_anterior != "-":
+                    g[station] = g[current_station] + distance + 4 * 60
+                else:
+                    g[station] = g[current_station] + distance 
 
             else:
                 if g[station] > g[current_station] + distance:
@@ -68,6 +77,7 @@ class Graph:
                         visited_neighbors.remove(station)
                         visited_stations.add(station)
 
+           
         visited_stations.remove(current_station)
         visited_neighbors.add(current_station)
 
@@ -79,6 +89,6 @@ if __name__ == "__main__":
     reader = AdjacencyList("./real-distance.csv")
     adj_list = reader.read()
     oi = Graph(adj_list)
-    oi.a_star("E1", "E7")
+    oi.a_star("E2", "E12")
     # print(adj_list)
 
