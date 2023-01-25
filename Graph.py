@@ -41,26 +41,26 @@ class Graph:
 
         if current_station == None:
             print('Não existe caminho entre essas estações')
-            return None
+            return
 
         if current_station == last_station:
-            reconst_path = []
+            path = []
 
             while parents[current_station] != current_station:
-                reconst_path.append(current_station)
+                path.append(current_station)
                 current_station = parents[current_station]
 
-            reconst_path.append(first_station)
+            path.append(first_station)
 
-            target = reconst_path[0]
+            target = path[0]
             targetInMinutes = g[target]/60
 
-            reconst_path.reverse()
+            path.reverse()
 
-            print('Caminho encontrado: {}'.format(reconst_path))
+            print('Caminho: {}'.format(path))
             print(f"Duração: {targetInMinutes:.2f} minutos")
             
-            return reconst_path
+            return path
 
         for (station, distance) in self.neighborhood(current_station):
             if station not in visited_stations and station not in visited_neighbors:
@@ -86,8 +86,7 @@ class Graph:
         visited_stations.remove(current_station)
         visited_neighbors.add(current_station)
 
-      print('Não existe caminho entre essas estações')
-      return None
+      print('Não há caminhos')
 
 
 if __name__ == "__main__":
