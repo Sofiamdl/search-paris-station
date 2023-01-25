@@ -19,11 +19,11 @@ class DirectDistance:
                 else:
                     newLine = self.parseFloat(nodes)
                     self.__matrix.append(newLine)
-        print(self.__matrix)
+        return self.__matrix
 
     def __toFloat(self,number):
         if number == "-": return 0.0
-        return number.replace(",", ".")
+        return float(number.replace(",", "."))
 
     def parseFloat(self, nodes):
         key = nodes.pop(0)

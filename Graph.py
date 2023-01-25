@@ -6,34 +6,15 @@ class Graph:
     def __init__(self, adjacency_list):
         self.__adjacency_list = adjacency_list
         self.__heuristic_matrix = DirectDistance("./direct-distance.csv").read()
+        self.__color_line = None
 
     def neighborhood(self, node):
         return self.__adjacency_list[node]
     
-    def heuristic(self, n):
-        # start = int(start[1:]) - 1 
-        # end = int(end[1:]) - 1
-        # return self.__heuristic_matrix[start][end] 
-
-
-        H = {
-            'E1': 1,
-            'E2': 1,
-            'E3': 1,
-            'E4': 1,
-            'E5': 1,
-            'E6': 1,
-            'E7': 1,
-            'E8': 1,
-            'E9': 1,
-            'E10': 1,           
-            'E11': 1,
-            'E12': 1,
-            'E13': 1,
-            'E14': 1
-        }
-
-        return H[n]
+    def heuristic(self, start, end):
+        start = int(start[1:]) - 1 
+        end = int(end[1:]) - 1
+        return self.__heuristic_matrix[start][end] 
 
     def a_star(self, first_station, last_station):
       visited_stations = set([first_station])
@@ -49,10 +30,8 @@ class Graph:
         current_station = None
 
         for station in visited_stations:
-          if current_station == None or g[station] + self.heuristic(station) < g[current_station] + self.heuristic(current_station):
+          if current_station == None or g[station] + self.heuristic(station, last_station) < g[current_station] + self.heuristic(current_station, last_station):
             current_station = station
-
-        print(f"current station: {current_station}, station: {station}")
 
         if current_station == None:
             print('Não existe caminho entre essas estações')
@@ -99,7 +78,6 @@ if __name__ == "__main__":
     reader = GraphReader("./real-distance.csv")
     adj_list = reader.read()
     oi = Graph(adj_list)
-    print(adj_list)
     oi.a_star("E1", "E7")
     # print(adj_list)
 
