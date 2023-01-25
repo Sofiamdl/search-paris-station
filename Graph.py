@@ -1,14 +1,21 @@
 from GraphReader import GraphReader
+from DirectDistance import DirectDistance
 
 class Graph:
 
     def __init__(self, adjacency_list):
         self.__adjacency_list = adjacency_list
-    
+        self.__heuristic_matrix = DirectDistance("./direct-distance.csv").read()
+
     def neighborhood(self, node):
         return self.__adjacency_list[node]
     
     def heuristic(self, n):
+        # start = int(start[1:]) - 1 
+        # end = int(end[1:]) - 1
+        # return self.__heuristic_matrix[start][end] 
+
+
         H = {
             'E1': 1,
             'E2': 1,
@@ -44,6 +51,8 @@ class Graph:
         for station in visited_stations:
           if current_station == None or g[station] + self.heuristic(station) < g[current_station] + self.heuristic(current_station):
             current_station = station
+
+        print(f"current station: {current_station}, station: {station}")
 
         if current_station == None:
             print('Não existe caminho entre essas estações')
