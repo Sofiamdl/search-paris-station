@@ -1,25 +1,20 @@
 
+from FileReader import FileReader
+from GraphReaderType import GraphReaderType
 class GraphReader:
 
-    def __init__(self, path, isColor=False):
+    def __init__(self, path: str, typeReader: GraphReaderType = GraphReaderType.NORMAL):
         self.__path = path
         self.__matrix = []
-        self.__isColor = isColor
+        self.__isColor: bool = typeReader.value
 
-    
     def read(self):
-        isHeader = True
-        
-        with open(self.__path, 'r') as data:
-            for line in data:
-                line = line.strip()
-                nodes = line.split(";")
-                if isHeader:
-                    isHeader = False
-                    continue
-                else:
-                    newLine = self.parseColor(nodes) if self.__isColor else self.parseFloat(nodes)
-                    self.__matrix.append(newLine)
+        header, data = FileReader().read(self.__path)
+
+        for node in data:
+            node_values = self.parseColor(node) if self.__isColor else self.parseFloat(node)
+            self.__matrix.append(node_values)
+
         return self.__matrix if self.__isColor else self.__fixDirection()
 
     def parseColor(self, nodes):
@@ -46,7 +41,8 @@ class GraphReader:
 if __name__ == "__main__":
     reader = GraphReader("./direct-distance.csv")
     lista = reader.read()
-    reader = GraphReader("./color-lines.csv", True)
+    print(lista)
+    reader = GraphReader("./color-lines.csv", GraphReaderType.COLOR)
     lista = reader.read()
     print(lista)
 
