@@ -1,41 +1,39 @@
-import csv
-from re import X
+from CharacterEnum import Character
+from FileReader import FileReader
+from TrainTimer import TrainTimer
 
 class AdjacencyList:
 
-    def __init__(self, path):
+    __slots__ = "__path", "__adjacency_list"
+
+    def __init__(self, path: str):
         self.__path = path
         self.__adjacency_list = {}
 
-    
     def read(self):
-        isHeader = True
-
-        with open(self.__path, 'r') as data:
-            for line in data:
-                line = line.strip()
-                nodes = line.split(";")
-                if isHeader:
-                    nodes = nodes[1::]
-                    self.__getNodes(nodes)
-                    isHeader = False
-                else:
-                    self.__getValues(nodes)
+        header, data = FileReader().read(self.__path)
+        self.__set_adjacency_list_header(header)
+        self.__set_adjacency_list_data(data)
 
         return self.__adjacency_list
-    
-    def __getNodes(self, nodes):
-        for node in nodes:
-            self.__adjacency_list[node] =[]
 
-    def __getValues(self, nodes):
+    def __set_adjacency_list_header(self, header: list[str]):
+        for node in header:
+            self.__adjacency_list[node] = []
+
+    def __set_adjacency_list_data(self, data: list[list[str]]):
+        for row in data:
+            self.__get_values(row)
+
+    def __get_values(self, nodes: list[str]):
         key = nodes.pop(0)
-        for index, value in enumerate(nodes):
-            if value == "-": continue
-            newNode = f"E{index+1}"
-            distanceInMeters = float(value.replace(',', '.')) * 1000.0
-            velocity = 8.33333
-            time = distanceInMeters / velocity
-            self.__adjacency_list[key].append((newNode, time))
-            self.__adjacency_list[newNode].append((key, time))
+        for index, time in enumerate(nodes):
+            if time == "-": continue
+            station = f"E{index+1}"
+            seconds = TrainTimer.parseSeconds(time)
+            self.__adjacency_list[key].append((station, seconds))
+            self.__adjacency_list[station].append((key, seconds))
 
+if __name__ == "__main__":
+    reader = AdjacencyList("./real-distance.csv")
+    print(reader.read())
