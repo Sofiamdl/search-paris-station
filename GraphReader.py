@@ -39,10 +39,10 @@ class GraphReader:
         return list(map(self.__toFloat, nodes))
 
 if __name__ == "__main__":
-    reader = GraphReader("./direct-distance.csv")
+    reader = GraphReader("./data/direct-distance.csv")
     lista = reader.read()
     print(lista)
-    reader = GraphReader("./color-lines.csv", GraphReaderType.COLOR)
+    reader = GraphReader("./data/color-lines.csv", GraphReaderType.COLOR)
     lista = reader.read()
     print(lista)
 

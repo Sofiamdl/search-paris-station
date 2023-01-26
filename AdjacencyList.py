@@ -35,5 +35,5 @@ class AdjacencyList:
             self.__adjacency_list[station].append((key, seconds))
 
 if __name__ == "__main__":
-    reader = AdjacencyList("./real-distance.csv")
+    reader = AdjacencyList("./data/real-distance.csv")
     print(reader.read())
