@@ -21,7 +21,7 @@ class GraphReader:
         key = nodes.pop(0)
         return nodes
 
-    def __toFloat(self,number):
+    def __toFloat(self, number: str):
         if number == "-": return 0.0
         return float(number.replace(",", "."))
 

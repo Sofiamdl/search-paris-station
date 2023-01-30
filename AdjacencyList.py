@@ -1,6 +1,7 @@
 from CharacterEnum import Character
 from FileReader import FileReader
 from TrainTimer import TrainTimer
+from Alias import Header, Graph
 
 class AdjacencyList:
 
@@ -17,15 +18,15 @@ class AdjacencyList:
 
         return self.__adjacency_list
 
-    def __set_adjacency_list_header(self, header: list[str]):
+    def __set_adjacency_list_header(self, header: Header):
         for node in header:
             self.__adjacency_list[node] = []
 
-    def __set_adjacency_list_data(self, data: list[list[str]]):
+    def __set_adjacency_list_data(self, data: Graph):
         for row in data:
             self.__get_values(row)
 
-    def __get_values(self, nodes: list[str]):
+    def __get_values(self, nodes: Header):
         key = nodes.pop(0)
         for index, time in enumerate(nodes):
             if time == "-": continue
