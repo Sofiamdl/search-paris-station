@@ -36,6 +36,7 @@ class Graph:
       while len(visited_stations) > 0:
         current_station = None
 
+
         for station in visited_stations:
           if current_station == None or g[station] + self.heuristic(station, last_station) < g[current_station] + self.heuristic(current_station, last_station):
             current_station = station
@@ -57,12 +58,11 @@ class Graph:
             targetInMinutes = g[target]/60
 
             path.reverse()
-
             print('Caminho: {}'.format(path))
             print(f"Duração: {targetInMinutes:.2f} minutos")
-            
             return path
 
+        aux = []
         for (station, distance) in self.neighborhood(current_station):
             if station not in visited_stations and station not in visited_neighbors:
                 visited_stations.add(station)
@@ -73,6 +73,7 @@ class Graph:
                     g[station] = g[current_station] + distance + 4 * 60
                 else:
                     g[station] = g[current_station] + distance 
+                aux.append((station, f'{g[station]/60:.2f}', color_line_aux))
 
             else:
                 if g[station] > g[current_station] + distance:
@@ -82,17 +83,23 @@ class Graph:
                     if station in visited_neighbors:
                         visited_neighbors.remove(station)
                         visited_stations.add(station)
+                    color_line_aux = self.find_color(current_station, station)
+                    aux.append((station, f'{g[station]/60:.2f}', color_line_aux))
 
-           
+        print(f'Fronteiras de {first_station} - {current_station}: {aux}')
         visited_stations.remove(current_station)
         visited_neighbors.add(current_station)
 
       print('Não há caminhos')
 
-
 if __name__ == "__main__":
     reader = AdjacencyList("./data/real-distance.csv")
     adj_list = reader.read()
-    oi = Graph(adj_list)
-    oi.a_star("E2", "E12")
+    result = Graph(adj_list)
+    print("Exemplo 1:")
+    result.a_star("E7", "E11")
+    print()
+    print("Exemplo 2:")
+    result.a_star("E12", "E2")
+
 
