@@ -82,6 +82,8 @@ class Graph:
                 parents[station] = current_station
                 color_line_anterior = self.find_color(parents[current_station], current_station)
                 color_line_aux = self.find_color(current_station, station)
+
+                # esse if é responsável por ver se houve troca de linha
                 if color_line_anterior != color_line_aux and color_line_aux != "-" and color_line_anterior != "-":
                     g[station] = g[current_station] + distance + 4 * 60
                 else:
@@ -100,10 +102,14 @@ class Graph:
                         
                     color_line_anterior = self.find_color(parents[current_station], current_station)
                     color_line_aux = self.find_color(current_station, station)
+                    ## vejo se houve mudança de linhas.
+
+
                     if color_line_anterior != color_line_aux and color_line_aux != "-" and color_line_anterior != "-":
                         g[station] = g[current_station] + distance + 4 * 60
                     else:
                         g[station] = g[current_station] + distance 
+                        
                     color_line_aux = self.find_color(current_station, station)
                     aux.append((station, f'{g[station]/60:.2f}', color_line_aux))
 
